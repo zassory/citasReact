@@ -7,8 +7,9 @@ import {
 //------------------------------------------------->
 export const App = () => {
 
-  const [ pacientes , setPacientes  ] = useState([]); //State de pacientes plural  n
-  const   [ paciente  , setPaciente ] = useState({}); //State de paciente singular 1
+  const [ pacientes , setPacientes  ] = useState([]);
+  
+  const [ paciente  , setPaciente ] = useState({});
     
 
   return (
@@ -18,6 +19,7 @@ export const App = () => {
         <Formulario 
           pacientes={ pacientes }
           setPacientes={ setPacientes }
+          paciente={ paciente }
         />
         <ListadoPacientes 
           pacientes={ pacientes }

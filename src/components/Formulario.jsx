@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { Error } from './';
 
 //------------------------------------------------->
-export const Formulario = ({ pacientes , setPacientes }) => {
+export const Formulario = ({ pacientes , setPacientes , paciente }) => {
 
   const [nombre,setNombre] = useState('');
   const [propietario,setPropietario] = useState('');
@@ -12,6 +12,8 @@ export const Formulario = ({ pacientes , setPacientes }) => {
   const [sintomas,setSintomas] = useState('');
 
   const [error,setError]   = useState(false);
+
+  console.log( paciente );
 
   const generarId = () => {
     const random = Math.random().toString(2);
