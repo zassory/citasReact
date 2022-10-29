@@ -1,7 +1,9 @@
-import { useState , useEffect } from 'react' 
+import { useState } from 'react';
+
+import { Error } from './';
 
 //------------------------------------------------->
-export const Formulario = () => {
+export const Formulario = ({ pacientes , setPacientes }) => {
 
   const [nombre,setNombre] = useState('');
   const [propietario,setPropietario] = useState('');
@@ -10,6 +12,12 @@ export const Formulario = () => {
   const [sintomas,setSintomas] = useState('');
 
   const [error,setError]   = useState(false);
+
+  const generarId = () => {
+    const random = Math.random().toString(2);
+    const fecha = Date.now();
+    return random+fecha;
+  }
   
 
   const handleSubmit = (e) => {
@@ -21,6 +29,26 @@ export const Formulario = () => {
       return;
     }
     setError( false );
+
+    const objetoPaciente = {
+      nombre,
+      propietario,
+      email,
+      fecha,
+      sintomas,
+      id: generarId(),
+    }//Toma los valores porque esta en el state
+    
+    //Requerimos tomar lo que esta en el state y
+    //Agregarle el nuevo objeto de paciente
+    //Metodo inmutable
+    setPacientes([...pacientes, objetoPaciente]);
+    //Reiniciar el form
+    setNombre('');
+    setPropietario('');
+    setEmail('');
+    setFecha('');
+    setSintomas('');
   }
 
 
@@ -38,10 +66,7 @@ export const Formulario = () => {
           className="bg-white shadow-md rounded-lg py-10 px-5">
 
             { error && (
-              <div className="bg-red-800 text-white text-center p-3
-              uppercase font-bold mb-3 rounded-md">
-                <p>Todos los campos son obligatorios</p>
-              </div>
+                <Error><p>'Todos los campos son obligatorios'</p></Error>                
               ) }
 
             <div className="mb-5">
