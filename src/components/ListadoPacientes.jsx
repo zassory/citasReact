@@ -1,7 +1,10 @@
+
+
 import { Paciente } from './Paciente';
 
-export const ListadoPacientes = ({ pacientes  , setPaciente }) => {
+export const ListadoPacientes = ({ pacientes  , setPaciente , eliminarPaciente  }) => {
 
+  
   
 
   return (
@@ -22,6 +25,7 @@ export const ListadoPacientes = ({ pacientes  , setPaciente }) => {
                 key={ paciente.id }
                 paciente={ paciente }
                 setPaciente={ setPaciente }
+                eliminarPaciente={ eliminarPaciente }
               />
               ))}
           </>

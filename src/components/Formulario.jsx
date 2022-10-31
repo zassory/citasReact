@@ -1,9 +1,9 @@
-import { useState } from 'react';
+import { useState , useEffect } from 'react';
 
 import { Error } from './';
 
 //------------------------------------------------->
-export const Formulario = ({ pacientes , setPacientes , paciente }) => {
+export const Formulario = ({  pacientes , setPacientes , paciente , setPaciente }) => {
 
   const [nombre,setNombre] = useState('');
   const [propietario,setPropietario] = useState('');
@@ -11,14 +11,32 @@ export const Formulario = ({ pacientes , setPacientes , paciente }) => {
   const [fecha,setFecha] = useState('');
   const [sintomas,setSintomas] = useState('');
 
-  const [error,setError]   = useState(false);
+  const [error,setError]   = useState(false);//otro state
 
-  console.log( paciente );
+  useEffect(()=> {
+    if(  Object.keys( paciente ).length > 0  ){
+      setNombre(paciente.nombre);
+      setPropietario(paciente.propietario);
+      setEmail(paciente.email);
+      setFecha(paciente.fecha);
+      setSintomas(paciente.sintomas);
+    }
+  },[paciente]);
+  
+
 
   const generarId = () => {
     const random = Math.random().toString(2);
     const fecha = Date.now();
     return random+fecha;
+  }
+
+  const cleanStates = () => {
+    setNombre('');
+    setPropietario('');
+    setEmail('');
+    setFecha('');
+    setSintomas('');
   }
   
 
@@ -31,26 +49,36 @@ export const Formulario = ({ pacientes , setPacientes , paciente }) => {
       return;
     }
     setError( false );
-
+    
     const objetoPaciente = {
       nombre,
       propietario,
       email,
       fecha,
-      sintomas,
-      id: generarId(),
-    }//Toma los valores porque esta en el state
+      sintomas,      
+    }
+
+    if(paciente.id){
+            
+      objetoPaciente.id = paciente.id;
+
+      //ya viene con todos los cambios
+      const pacientesActualizados = pacientes.map( pacienteState => 
+        pacienteState.id === paciente.id
+        ? objetoPaciente //Si es el mismo actualiza
+        : pacienteState  );//Si no muestra lo mismo
+            
+      setPacientes( pacientesActualizados );
+      setPaciente({}); //Limpia el paciente seleccionado
+      
+    }else{
+      //Nuevo Registro
+      objetoPaciente.id = generarId();
+      setPacientes([...pacientes, objetoPaciente]);
+    }
     
-    //Requerimos tomar lo que esta en el state y
-    //Agregarle el nuevo objeto de paciente
-    //Metodo inmutable
-    setPacientes([...pacientes, objetoPaciente]);
-    //Reiniciar el form
-    setNombre('');
-    setPropietario('');
-    setEmail('');
-    setFecha('');
-    setSintomas('');
+        
+    cleanStates();
   }
 
 
@@ -201,7 +229,7 @@ export const Formulario = ({ pacientes , setPacientes , paciente }) => {
                 cursor-pointer
                 transition-all
                 "
-              value="Agregar Paciente"
+              value={ paciente.id ? 'Editar Paciente' : 'Agregar Paciente' }
             />
 
         </form>
